@@ -3,81 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plan Your Date</title>
+    <title>An Invitation For You ✨</title>
     <style>
-        /* Base Reset & Typography */
+        /* Base Reset & Styling */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
-            /* Soft gradient background */
             background: linear-gradient(135deg, #ffd3c4 0%, #f9ebed 50%, #f4f0f4 100%);
             color: #333;
             min-height: 100vh;
-            padding: 2rem;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            overflow-x: hidden; /* Prevents scrollbars if the button runs near the edge */
+            padding: 1rem;
+            overflow-x: hidden;
         }
 
-        /* Reusable Glassmorphism Card Style */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
+        /* Container Card */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Navbar */
-        header {
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 2.5rem 1.5rem;
             width: 100%;
-            max-width: 1000px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            border-radius: 50px;
+            max-width: 500px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            display: none; /* Hidden by default, controlled via JS */
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
             margin-bottom: 2rem;
+            overflow: hidden;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .progress-bar {
+            height: 100%;
+            width: 20%;
+            background: #ff1b7a;
+            transition: width 0.3s ease;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
             font-weight: 800;
-            color: #ff1b7a;
+            color: #222;
         }
 
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+        p.subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1rem;
         }
 
         /* Buttons */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            min-height: 80px;
+            margin-top: 2rem;
+        }
+
         .btn {
-            padding: 0.6rem 1.5rem;
+            padding: 0.8rem 2rem;
             border-radius: 50px;
-            text-decoration: none;
+            font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
             border: none;
-            transition: transform 0.2s;
-        }
-        
-        .btn:hover {
-            transform: scale(1.05);
+            transition: all 0.2s ease;
         }
 
         .btn-primary {
             background: #ff1b7a;
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 27, 122, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 27, 122, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.03);
         }
 
         .btn-outline {
@@ -86,184 +115,245 @@
             border: 2px solid #ff1b7a;
         }
 
-        /* Stats Banner */
-        .stats-banner {
-            width: 100%;
-            max-width: 800px;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            text-align: center;
+        #no-btn {
+            position: relative;
+            transition: all 0.2s ease;
+            z-index: 10;
         }
 
-        .stats-banner strong {
-            color: #ff1b7a;
-        }
-
-        /* Features Grid */
-        .features-grid {
-            width: 100%;
-            max-width: 1000px;
+        /* Grid Selections (Food & Activities) */
+        .grid-select {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
             margin-bottom: 1.5rem;
         }
 
-        .feature-card {
-            padding: 2rem;
-            text-align: center;
+        .grid-item {
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            transition: all 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
-            transition: transform 0.2s;
+            gap: 0.5rem;
         }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
+        .grid-item:hover {
+            transform: translateY(-2px);
         }
 
-        .icon {
+        .grid-item.selected {
+            border-color: #ff1b7a;
+            background: #fff0f5;
+        }
+
+        .grid-item .emoji {
             font-size: 2rem;
         }
 
-        /* Interactive Proposal Section */
-        .proposal-section {
-            margin-top: 3rem;
-            padding: 3rem 2rem;
-            text-align: center;
+        /* Inputs */
+        input[type="date"], input[type="time"] {
             width: 100%;
-            max-width: 600px;
+            padding: 1rem;
+            border: 2px solid rgba(0,0,0,0.08);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            outline: none;
+            background: white;
         }
 
-        .proposal-title {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #333;
+        input:focus {
+            border-color: #ff1b7a;
         }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            min-height: 60px; /* Keeps layout stable when 'No' leaves the flow */
+        /* Summary List */
+        .summary-box {
+            text-align: left;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.02);
         }
 
-        .big-btn {
-            font-size: 1.2rem;
-            padding: 1rem 3rem;
+        .summary-item {
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
         }
 
-        /* Runaway Button Specifics */
-        #no-btn {
-            transition: top 0.3s ease, left 0.3s ease; /* Smooth sliding effect */
-            z-index: 100; /* Keeps it on top of other elements */
-        }
-
-        /* Responsive adjustments for phones */
-        @media (max-width: 768px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            .stats-banner {
-                flex-direction: column;
-                border-radius: 20px;
-            }
-            .proposal-title {
-                font-size: 2rem;
-            }
+        /* Mobile specific fixes */
+        @media (max-width: 480px) {
+            h2 { font-size: 1.5rem; }
+            .btn { width: 100%; padding: 0.8rem 1.5rem; }
+            .btn-group { flex-direction: column; gap: 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <header class="glass-panel">
-        <div class="logo">PlanYour.Date</div>
-        <div class="nav-actions">
-            <a href="#" style="color: #ff1b7a; text-decoration: none; font-weight: bold;">? FAQ</a>
-            <button class="btn btn-primary">➔ GET STARTED</button>
-        </div>
-    </header>
-
-    <div class="stats-banner glass-panel">
-        <span><strong>94,420+</strong> couples have already sent theirs. Don't let yours wait.</span>
-        <button class="btn btn-outline">Register now</button>
-    </div>
-
-    <div class="features-grid">
-        <div class="feature-card glass-panel">
-            <div class="icon">✨</div>
-            <p><strong>Create:</strong> Pick dates, food & activities.</p>
-        </div>
-        <div class="feature-card glass-panel">
-            <div class="icon">✈️</div>
-            <p><strong>Share:</strong> Send the magical link.</p>
-        </div>
-        <div class="feature-card glass-panel">
-            <div class="icon">😍</div>
-            <p><strong>Get a YES:</strong> Watch them interact.</p>
-        </div>
-    </div>
-
-    <div class="proposal-section glass-panel">
-        <h2 class="proposal-title">Will you go on a date with me? 🥺</h2>
+    <!-- STEP 1: THE PROPOSAL -->
+    <div class="card active" id="step-1">
+        <div class="progress-container"><div class="progress-bar" style="width: 25%"></div></div>
+        <h2>Would you like to go on a date with me? 🥺</h2>
+        <p class="subtitle">Please say yes, I've planned everything out!</p>
         
-        <div class="button-container">
-            <button id="yes-btn" class="btn btn-primary big-btn">YES!</button>
-            
-            <button id="no-btn" class="btn btn-outline big-btn">No</button>
+        <div class="btn-group">
+            <button class="btn btn-primary" id="yes-btn" onclick="nextStep(2)">YES! ✨</button>
+            <button class="btn btn-outline" id="no-btn">No u can't</button>
         </div>
+    </div>
+
+    <!-- STEP 2: THE DATE & TIME -->
+    <div class="card" id="step-2">
+        <div class="progress-container"><div class="progress-bar" style="width: 50%"></div></div>
+        <h2>Pick a perfect day & time 🗓️</h2>
+        <p class="subtitle">When are you free?</p>
+        
+        <input type="date" id="date-input">
+        <input type="time" id="time-input">
+        
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="saveDateTime()">Next Step ➔</button>
+        </div>
+    </div>
+
+    <!-- STEP 3: FOOD SELECTION -->
+    <div class="card" id="step-3">
+        <div class="progress-container"><div class="progress-bar" style="width: 75%"></div></div>
+        <h2>What are we eating? 🍕</h2>
+        <p class="subtitle">Select your favorite vibe (you can pick multiple!):</p>
+        
+        <div class="grid-select">
+            <div class="grid-item" onclick="toggleSelect(this, 'food', 'Burgers 🍔')"><span class="emoji">🍔</span><span>Burgers</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'food', 'Pizza 🍕')"><span class="emoji">🍕</span><span>Pizza</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'food', 'Sushi 🍣')"><span class="emoji">🍣</span><span>Sushi</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'food', 'Pasta 🍝')"><span class="emoji">🍝</span><span>Pasta</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'food', 'Brunch 🥞')"><span class="emoji">🥞</span><span>Brunch</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'food', 'Ice Cream 🍦')"><span class="emoji">🍦</span><span>Dessert</span></div>
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%;" onclick="nextStep(4)">Next Step ➔</button>
+    </div>
+
+    <!-- STEP 4: ACTIVITY SELECTION -->
+    <div class="card" id="step-4">
+        <div class="progress-container"><div class="progress-bar" style="width: 90%"></div></div>
+        <h2>What are we doing? 🎬</h2>
+        <p class="subtitle">Pick some activities you'd enjoy:</p>
+        
+        <div class="grid-select">
+            <div class="grid-item" onclick="toggleSelect(this, 'activity', 'Movie Night 🎬')"><span class="emoji">🎬</span><span>Movie</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'activity', 'Museum 🖼️')"><span class="emoji">🖼️</span><span>Museum</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'activity', 'Bowling 🎳')"><span class="emoji">🎳</span><span>Bowling</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'activity', 'Picnic 🧺')"><span class="emoji">🧺</span><span>Picnic</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'activity', 'Arcade 🕹️')"><span class="emoji">🕹️</span><span>Arcade</span></div>
+            <div class="grid-item" onclick="toggleSelect(this, 'activity', 'Stargazing 🌌')"><span class="emoji">🌌</span><span>Stargazing</span></div>
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%;" onclick="generateRecap()">Finish Plan 🎉</button>
+    </div>
+
+    <!-- STEP 5: RECAP / SUCCESS -->
+    <div class="card" id="step-5">
+        <div class="progress-container"><div class="progress-bar" style="width: 100%"></div></div>
+        <h2>It's an official date! 🎉❤️</h2>
+        <p class="subtitle">Here is our master plan:</p>
+        
+        <div class="summary-box">
+            <div class="summary-item"><strong>🗓️ Date:</strong> <span id="summary-date">TBD</span></div>
+            <div class="summary-item"><strong>⏰ Time:</strong> <span id="summary-time">TBD</span></div>
+            <div class="summary-item"><strong>🍔 Food:</strong> <span id="summary-food">Anything!</span></div>
+            <div class="summary-item"><strong>⚡ Activity:</strong> <span id="summary-activity">Surprise me!</span></div>
+        </div>
+
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Take a screenshot and send it to me! 📱</p>
     </div>
 
     <script>
-        const noButton = document.getElementById('no-btn');
-        const yesButton = document.getElementById('yes-btn');
-
-        // Function that handles teleporting the button
-        function runAway() {
-            // Get window size
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
-            
-            // Get button size so it doesn't get pushed off screen
-            const btnWidth = noButton.offsetWidth;
-            const btnHeight = noButton.offsetHeight;
-            
-            // Calculate random coordinates (leaving a small 20px padding)
-            const randomX = Math.max(20, Math.floor(Math.random() * (windowWidth - btnWidth - 40)));
-            const randomY = Math.max(20, Math.floor(Math.random() * (windowHeight - btnHeight - 40)));
-            
-            // Apply the new coordinates
-            noButton.style.position = 'fixed'; // Breaks it out of normal layout
-            noButton.style.left = randomX + 'px';
-            noButton.style.top = randomY + 'px';
+        // Multi-step Navigation Logic
+        function nextStep(stepNumber) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.getElementById(`step-${stepNumber}`).classList.add('active');
         }
 
-        // Trigger for computers (Mouse hover)
-        noButton.addEventListener('mouseover', runAway);
-        
-        // Trigger for phones (Touch attempt)
-        noButton.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // Stops the tap from registering a click
-            runAway();
-        });
+        // Selections Storage
+        let selections = {
+            date: '',
+            time: '',
+            food: [],
+            activity: []
+        };
 
-        // What happens when they click YES
-        yesButton.addEventListener('click', function() {
-            alert("Yay! It's a date! 🎉 I'll text you the details.");
+        function toggleSelect(element, type, value) {
+            element.classList.toggle('selected');
+            if (element.classList.contains('selected')) {
+                selections[type].push(value);
+            } else {
+                selections[type] = selections[type].filter(item => item !== value);
+            }
+        }
+
+        function saveDateTime() {
+            const d = document.getElementById('date-input').value;
+            const t = document.getElementById('time-input').value;
+            selections.date = d ? d : "A surprise day!";
+            selections.time = t ? t : "A surprise hour!";
+            nextStep(3);
+        }
+
+        function generateRecap() {
+            document.getElementById('summary-date').innerText = selections.date;
+            document.getElementById('summary-time').innerText = selections.time;
+            document.getElementById('summary-food').innerText = selections.food.length ? selections.food.join(', ') : "Surprise me!";
+            document.getElementById('summary-activity').innerText = selections.activity.length ? selections.activity.join(', ') : "Surprise me!";
+            nextStep(5);
+        }
+
+        // --- DRAMA CONTROLS (Runaway & Growing Yes Button) ---
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        let yesScale = 1;
+        let noClicks = 0;
+
+        function chaosMove() {
+            noClicks++;
             
-            // Fun UI updates upon success
-            yesButton.innerHTML = "See you then! ❤️";
-            noButton.style.display = "none"; // Delete the No button entirely
+            // 1. Make the YES button get progressively larger and harder to ignore
+            yesScale += 0.3;
+            yesBtn.style.transform = `scale(${yesScale})`;
+            
+            // 2. Teleport the "No" button randomly across the entire viewport
+            const padding = 40;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+            
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            
+            // Fun label changes as she keeps trying
+            if (noClicks === 2) noBtn.innerText = "Are you sure? 🤨";
+            if (noClicks === 4) noBtn.innerText = "Error 404: No not found 🤖";
+            if (noClicks >= 6) noBtn.innerText = "Click YES already! 😂";
+        }
+
+        // Hover support for Desktop
+        noBtn.addEventListener('mouseover', chaosMove);
+        
+        // Tap support for Mobile Touch screens
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Blocks actual tap execution
+            chaosMove();
         });
     </script>
-
 </body>
 </html>
