@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Your Date</title>
+    <style>
+        /* Base Reset & Typography */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            /* Soft gradient background */
+            background: linear-gradient(135deg, #ffd3c4 0%, #f9ebed 50%, #f4f0f4 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden; /* Prevents scrollbars if the button runs near the edge */
+        }
+
+        /* Reusable Glassmorphism Card Style */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Navbar */
+        header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #ff1b7a;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background: #ff1b7a;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 27, 122, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #ff1b7a;
+            border: 2px solid #ff1b7a;
+        }
+
+        /* Stats Banner */
+        .stats-banner {
+            width: 100%;
+            max-width: 800px;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .stats-banner strong {
+            color: #ff1b7a;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon {
+            font-size: 2rem;
+        }
+
+        /* Interactive Proposal Section */
+        .proposal-section {
+            margin-top: 3rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .proposal-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            min-height: 60px; /* Keeps layout stable when 'No' leaves the flow */
+        }
+
+        .big-btn {
+            font-size: 1.2rem;
+            padding: 1rem 3rem;
+        }
+
+        /* Runaway Button Specifics */
+        #no-btn {
+            transition: top 0.3s ease, left 0.3s ease; /* Smooth sliding effect */
+            z-index: 100; /* Keeps it on top of other elements */
+        }
+
+        /* Responsive adjustments for phones */
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-banner {
+                flex-direction: column;
+                border-radius: 20px;
+            }
+            .proposal-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="glass-panel">
+        <div class="logo">PlanYour.Date</div>
+        <div class="nav-actions">
+            <a href="#" style="color: #ff1b7a; text-decoration: none; font-weight: bold;">? FAQ</a>
+            <button class="btn btn-primary">➔ GET STARTED</button>
+        </div>
+    </header>
+
+    <div class="stats-banner glass-panel">
+        <span><strong>94,420+</strong> couples have already sent theirs. Don't let yours wait.</span>
+        <button class="btn btn-outline">Register now</button>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card glass-panel">
+            <div class="icon">✨</div>
+            <p><strong>Create:</strong> Pick dates, food & activities.</p>
+        </div>
+        <div class="feature-card glass-panel">
+            <div class="icon">✈️</div>
+            <p><strong>Share:</strong> Send the magical link.</p>
+        </div>
+        <div class="feature-card glass-panel">
+            <div class="icon">😍</div>
+            <p><strong>Get a YES:</strong> Watch them interact.</p>
+        </div>
+    </div>
+
+    <div class="proposal-section glass-panel">
+        <h2 class="proposal-title">Will you go on a date with me? 🥺</h2>
+        
+        <div class="button-container">
+            <button id="yes-btn" class="btn btn-primary big-btn">YES!</button>
+            
+            <button id="no-btn" class="btn btn-outline big-btn">No</button>
+        </div>
+    </div>
+
+    <script>
+        const noButton = document.getElementById('no-btn');
+        const yesButton = document.getElementById('yes-btn');
+
+        // Function that handles teleporting the button
+        function runAway() {
+            // Get window size
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Get button size so it doesn't get pushed off screen
+            const btnWidth = noButton.offsetWidth;
+            const btnHeight = noButton.offsetHeight;
+            
+            // Calculate random coordinates (leaving a small 20px padding)
+            const randomX = Math.max(20, Math.floor(Math.random() * (windowWidth - btnWidth - 40)));
+            const randomY = Math.max(20, Math.floor(Math.random() * (windowHeight - btnHeight - 40)));
+            
+            // Apply the new coordinates
+            noButton.style.position = 'fixed'; // Breaks it out of normal layout
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        }
+
+        // Trigger for computers (Mouse hover)
+        noButton.addEventListener('mouseover', runAway);
+        
+        // Trigger for phones (Touch attempt)
+        noButton.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Stops the tap from registering a click
+            runAway();
+        });
+
+        // What happens when they click YES
+        yesButton.addEventListener('click', function() {
+            alert("Yay! It's a date! 🎉 I'll text you the details.");
+            
+            // Fun UI updates upon success
+            yesButton.innerHTML = "See you then! ❤️";
+            noButton.style.display = "none"; // Delete the No button entirely
+        });
+    </script>
+
+</body>
+</html>
