@@ -102,10 +102,19 @@
     </div>
 
     <script>
-        function nextStep(stepNumber) {
-            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
-            document.getElementById(`step-${stepNumber}`).classList.add('active');
-        }
+       function nextStep(stepNumber) {
+    document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+    document.getElementById(`step-${stepNumber}`).classList.add('active');
+
+    if (stepNumber === 2) {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ff1b7a', '#ff4b98', '#ffffff']
+        });
+    }
+}
 
         let selections = {
             date: '',
@@ -192,5 +201,6 @@
             chaosMove();
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
