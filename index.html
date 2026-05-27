@@ -36,7 +36,7 @@
             max-width: 500px;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
             text-align: center;
-            display: none; /* Hidden by default, controlled via JS */
+            display: none;
             animation: fadeIn 0.4s ease-out;
         }
 
@@ -121,7 +121,7 @@
             z-index: 10;
         }
 
-        /* Grid Selections (Food & Activities) */
+        /* Grid Selections */
         .grid-select {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -187,7 +187,6 @@
             font-size: 1.05rem;
         }
 
-        /* Mobile specific fixes */
         @media (max-width: 480px) {
             h2 { font-size: 1.5rem; }
             .btn { width: 100%; padding: 0.8rem 1.5rem; }
@@ -197,7 +196,6 @@
 </head>
 <body>
 
-    <!-- STEP 1: THE PROPOSAL -->
     <div class="card active" id="step-1">
         <div class="progress-container"><div class="progress-bar" style="width: 25%"></div></div>
         <h2>Would you like to go on a date with me? 🥺</h2>
@@ -209,7 +207,6 @@
         </div>
     </div>
 
-    <!-- STEP 2: THE DATE & TIME -->
     <div class="card" id="step-2">
         <div class="progress-container"><div class="progress-bar" style="width: 50%"></div></div>
         <h2>Pick a perfect day & time 🗓️</h2>
@@ -223,7 +220,6 @@
         </div>
     </div>
 
-    <!-- STEP 3: FOOD SELECTION -->
     <div class="card" id="step-3">
         <div class="progress-container"><div class="progress-bar" style="width: 75%"></div></div>
         <h2>What are we eating? 🍕</h2>
@@ -241,7 +237,6 @@
         <button class="btn btn-primary" style="width: 100%;" onclick="nextStep(4)">Next Step ➔</button>
     </div>
 
-    <!-- STEP 4: ACTIVITY SELECTION -->
     <div class="card" id="step-4">
         <div class="progress-container"><div class="progress-bar" style="width: 90%"></div></div>
         <h2>What are we doing? 🎬</h2>
@@ -259,11 +254,9 @@
         <button class="btn btn-primary" style="width: 100%;" onclick="generateRecap()">Finish Plan 🎉</button>
     </div>
 
-    <!-- STEP 5: RECAP / SUCCESS -->
     <div class="card" id="step-5">
         <div class="progress-container"><div class="progress-bar" style="width: 100%"></div></div>
         <h2>It's an official date! 🎉❤️</h2>
-        <p class="subtitle">Here is our master plan:</p>
         
         <div class="summary-box">
             <div class="summary-item"><strong>🗓️ Date:</strong> <span id="summary-date">TBD</span></div>
@@ -272,7 +265,7 @@
             <div class="summary-item"><strong>⚡ Activity:</strong> <span id="summary-activity">Surprise me!</span></div>
         </div>
 
-        <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Take a screenshot and send it to me! 📱</p>
+        <p style="font-size: 1.1rem; color: #ff1b7a; font-weight: bold; margin-bottom: 1.5rem;">I got your answers! I can't wait. ❤️</p>
     </div>
 
     <script>
@@ -308,14 +301,41 @@
         }
 
         function generateRecap() {
+            // 1. Update UI
             document.getElementById('summary-date').innerText = selections.date;
             document.getElementById('summary-time').innerText = selections.time;
-            document.getElementById('summary-food').innerText = selections.food.length ? selections.food.join(', ') : "Surprise me!";
-            document.getElementById('summary-activity').innerText = selections.activity.length ? selections.activity.join(', ') : "Surprise me!";
+            
+            const foodText = selections.food.length ? selections.food.join(', ') : "Surprise me!";
+            const activityText = selections.activity.length ? selections.activity.join(', ') : "Surprise me!";
+            
+            document.getElementById('summary-food').innerText = foodText;
+            document.getElementById('summary-activity').innerText = activityText;
+
+            // 2. Prepare Data for Google Forms
+            const formData = new FormData();
+            formData.append('entry.1294398639', selections.date);
+            formData.append('entry.1109952925', selections.time);
+            formData.append('entry.1666859878', foodText);
+            formData.append('entry.863279864', activityText);
+
+            // 3. Send Data to Google silently
+            const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfVyavjP1QYBUBsQFZdv2OCmFC7afeNUx6iVlHWoIa0I8Ah8g/formResponse";
+            
+            fetch(googleFormURL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                body: formData
+            }).then(() => {
+                console.log("Successfully sent to database!");
+            }).catch(error => {
+                console.error("Error:", error);
+            });
+
+            // 4. Show the final success screen
             nextStep(5);
         }
 
-        // --- DRAMA CONTROLS (Runaway & Growing Yes Button) ---
+        // --- DRAMA CONTROLS (Runaway Button) ---
         const noBtn = document.getElementById('no-btn');
         const yesBtn = document.getElementById('yes-btn');
         let yesScale = 1;
@@ -323,12 +343,9 @@
 
         function chaosMove() {
             noClicks++;
-            
-            // 1. Make the YES button get progressively larger and harder to ignore
             yesScale += 0.3;
             yesBtn.style.transform = `scale(${yesScale})`;
             
-            // 2. Teleport the "No" button randomly across the entire viewport
             const padding = 40;
             const maxX = window.innerWidth - noBtn.offsetWidth - padding;
             const maxY = window.innerHeight - noBtn.offsetHeight - padding;
@@ -340,18 +357,14 @@
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
             
-            // Fun label changes as she keeps trying
             if (noClicks === 2) noBtn.innerText = "Are you sure? 🤨";
             if (noClicks === 4) noBtn.innerText = "Error 404: No not found 🤖";
             if (noClicks >= 6) noBtn.innerText = "Click YES already! 😂";
         }
 
-        // Hover support for Desktop
         noBtn.addEventListener('mouseover', chaosMove);
-        
-        // Tap support for Mobile Touch screens
         noBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // Blocks actual tap execution
+            e.preventDefault();
             chaosMove();
         });
     </script>
